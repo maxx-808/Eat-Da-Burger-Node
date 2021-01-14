@@ -1,0 +1,133 @@
+<header>
+    <center>
+        <h1>BURGER EATER!</h1>
+
+        <h2>Enter the type of burger you like!</h2>
+        <h2>click the devour button to eat the whole burger!</h2>
+    </center>
+</header>
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col new-burgers">
+            <ul>
+                {{#each burgers}}
+                {{#if devoured}}
+                {{> burgers/burger-block devour=0}}
+                {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+        <div class="col devoured-burgers">
+            <ul>
+                {{#each burgers}}
+                {{#unless devoured}}
+                {{> burgers/burger-block devour=1}}
+                {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+
+    <div id="addburger1" class="row">
+        <h1>Add a burger!!!</h1>
+        <form id="create-form">
+
+            <div class="form-group">
+                <label for="ca">Name of Burger:</label>
+                <input type="text" id="ca" name="name">
+            </div>
+
+            <button type="submit">Add Burger</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Make sure we wait to attach our handlers until the DOM is fully loaded.
+    document.addEventListener('DOMContentLoaded', (event) => {
+        if (event) {
+            console.info('DOM loaded');
+        }
+
+        // UPDATE
+        const changeDevourBtns = document.querySelectorAll('.change-devour');
+
+        // Set up the event listener for the create button
+        if (changeDevourBtns) {
+            changeDevourBtns.forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    console.log("e = ", e)
+                    // Grabs the id of the element that goes by the name, "id"
+                    const id = e.target.getAttribute('data-id');
+                    const newDevour = e.target.getAttribute('data-newdevour');
+
+                    const newDevourState = {
+                        devoured: newDevour,
+                    };
+
+                    fetch(`/api/burgers/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            Accept: 'application/json',
+                        },
+
+                        // make sure to serialize the JSON body
+                        body: JSON.stringify(newDevourState),
+                    }).then((response) => {
+                        // Check that the response is all good
+                        // Reload the page so the user can see the new quote
+                        if (response.ok) {
+                            console.log(`changed devour to: ${newDevour}`);
+                            location.reload('/');
+                        } else {
+                            alert('something went wrong!');
+                        }
+                    });
+                });
+            });
+        }
+
+        // CREATE
+        const createBurgerBtn = document.getElementById('create-form');
+
+        if (createBurgerBtn) {
+            createBurgerBtn.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Grabs the value of the textarea that goes by the name, "quote"
+                const newBurger = {
+                    burger_name: document.getElementById('ca').value.trim(),
+                };
+                console.log(newBurger)
+                // Send POST request to create a new quote
+                fetch('http://localhost:8080/api/burgers', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'text/plain',
+                    },
+
+                    // make sure to serialize the JSON body
+                    body: JSON.stringify(newBurger),
+
+                }).then(response => response.json()).then(data => {
+                    //console.log(response)
+                    //console.log("body = ", body)
+                    //console.log("newBurger = ", newBurger)
+
+
+                    // Reload the page so the user can see the new quote
+                    console.log('sucess data: ', data);
+                    location.reload();
+                }).catch((error) => {
+                    console.error('error: ', error)
+                });
+            });
+        }
+    });
+
+</script>

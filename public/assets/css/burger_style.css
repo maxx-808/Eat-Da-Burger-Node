@@ -1,0 +1,25 @@
+body {
+  background-image: url("https://wallpaperaccess.com/full/235207.png");
+  height: auto;
+}
+
+header {
+  text-align: center;
+}
+
+.new-burgers {
+  float: left;
+}
+
+.devoured-burgers {
+  float: right;
+}
+
+li {
+  background-color: yellow;
+  margin: 15px;
+}
+
+#addburger1 {
+  text-align: center;
+}
