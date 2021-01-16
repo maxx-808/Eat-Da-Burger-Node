@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "Why9076ba11!",
-    "database": "burgers_db",
+    "database": "burgers",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
