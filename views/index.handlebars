@@ -102,7 +102,7 @@
                 const newBurger = {
                     burger_name: document.getElementById('ca').value.trim(),
                 };
-                console.log(newBurger)
+                console.log("newBurger ", newBurger)
                 // Send POST request to create a new quote
                 fetch('http://localhost:8080/api/burgers', {
                     method: 'POST',
@@ -115,7 +115,7 @@
                     body: JSON.stringify(newBurger),
 
                 }).then(response => response.json()).then(data => {
-                    //console.log(response)
+                    console.log("response ", response)
                     //console.log("body = ", body)
                     //console.log("newBurger = ", newBurger)
 

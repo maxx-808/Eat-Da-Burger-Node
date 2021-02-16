@@ -1,6 +1,8 @@
 //Import MySQL connection
 const connection = require("./connection");
 
+// const vals = document.getElementById("burgerInput");
+
 //Helper function for SQL syntax to ad question marks in query
 const printQuestionMarks = (num) => {
   const arr = [];
@@ -37,8 +39,11 @@ const objToSql = (ob) => {
 
 const orm = {
   selectAll(tableInput, cb) {
-    const queryString = `SELECT * FROM ${tableInput};`;
-    connection.query(queryString, (err, result) => {
+    // console.log("tableinput " + tableInput);
+    // console.log("cb " + cb);
+    const querySelect = `SELECT * FROM ${tableInput};`;
+    connection.query(querySelect, (err, result) => {
+      console.log("result ", result);
       if (err) {
         throw err;
       }
@@ -46,33 +51,32 @@ const orm = {
     });
   },
   insertOne(table, vals, cb) {
-    let queryString = `INSERT INTO ${table} (burger_name) VALUES ("burger test")`;
+    let queryInsert = `INSERT INTO ${table} (burger_name) VALUES ?`;
 
-    console.log("query string: ", queryString);
+    console.log("query string: ", queryInsert);
     console.log("orm.js insertOne vals: ", vals);
 
-    connection.query(queryString, vals, (err, result) => {
+    connection.query(queryInsert, vals, (err, result) => {
       if (err) {
         throw err;
       }
       console.log("orm.js insertOne connection.query", vals);
-      console.log(queryString);
+      console.log(queryInsert);
     });
   },
   updateOne(table, objColVals, condition, cb) {
-    let queryString = `UPDATE ${table}`;
+    let queryUpdate = `UPDATE ${table}`;
 
-    queryString += " SET ";
-    queryString += objToSql(objColVals);
-    queryString += " WHERE ";
-    queryString += condition;
+    queryUpdate += " SET ";
+    queryUpdate += objToSql(objColVals);
+    queryUpdate += " WHERE ";
+    queryUpdate += condition;
 
-    console.log(queryString);
-    connection.query(queryString, (err, result) => {
+    console.log(queryUpdate);
+    connection.query(queryUpdate, (err, result) => {
       if (err) {
         throw err;
       }
-
       cb(result);
     });
   },
